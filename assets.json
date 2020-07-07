@@ -1,0 +1,31 @@
+{
+    
+    "gdPath": "C:/Program Files (x86)/Steam/steamapps/common/Geometry Dash/Resources",
+
+    "sheets": {
+        "FireSheet_01-uhd": 40,
+        "GauntletSheet-uhd": 50,
+        "GJ_GameSheet-uhd": 30,
+        "GJ_GameSheet02-uhd": 40,
+        "GJ_GameSheet03-uhd": 30,
+        "GJ_GameSheet04-uhd": 25,
+        "GJ_GameSheetGlow-uhd": 30,
+        "GJ_LaunchSheet-uhd": 150,
+        "GJ_ShopSheet-uhd": 60,
+        "SecretSheet-uhd": 150
+
+      "sprites": [
+        "dialogIcon_#",
+        "game_bg_#_001",
+        "GJ_button_#",
+        "GJ_square#",
+        "groundSquare_#_2_001||*",
+        "tutorial_#",
+        "groundSquare_#_001||g1",
+        "groundSquare_#_001||g2"
+      ],
+
+      "forms": [
+        "player_ball", "player", "ship", "bird", "dart", "robot", "spider"
+      ]
+}
