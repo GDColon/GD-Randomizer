@@ -1,5 +1,4 @@
 {
-    
     "gdPath": "C:/Program Files (x86)/Steam/steamapps/common/Geometry Dash/Resources",
 
     "sheets": {
@@ -13,6 +12,7 @@
         "GJ_LaunchSheet-uhd": 150,
         "GJ_ShopSheet-uhd": 60,
         "SecretSheet-uhd": 150
+    },
 
       "sprites": [
         "dialogIcon_#",
