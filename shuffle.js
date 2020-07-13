@@ -18,7 +18,10 @@ function plistToJson(file) {
     for (let key in data.frames) {
         let fileData = data.frames[key];
         for (let innerKey in fileData) {
-            if (typeof fileData[innerKey] === 'string') fileData[innerKey] = JSON.parse(fileData[innerKey].replace(/{/g, '[').replace(/}/g, ']'));
+            if (typeof fileData[innerKey] == 'string') {
+                if (!fileData[innerKey].length) delete fileData[innerKey]
+                else fileData[innerKey] = JSON.parse(fileData[innerKey].replace(/{/g, '[').replace(/}/g, ']'));
+            }
     }}
     return data.frames
 }
@@ -34,6 +37,7 @@ let forms = assets.forms
 let sheetList = Object.keys(assets.sheets)
 let glowName = sheetList.filter(x => x.startsWith('GJ_GameSheetGlow'))
 let gdPath = fs.readFileSync('directory.txt', 'utf8')
+if (!fs.existsSync(gdPath)) throw "Couldn't find your GD directory! Make sure to enter the correct file path in directory.txt"  
 let glowPlist = fs.readFileSync(`${gdPath}/${glowName[0]}.plist`, 'utf8')
 let sheetNames = sheetList.filter(x => !glowName.includes(x))
 let resources = fs.readdirSync(gdPath)
@@ -130,4 +134,4 @@ console.log("Randomization complete!")
 
 }
 
-catch(e) { console.log(e); fs.writeFileSync('crash_log.txt', `Something went wrong! Send this error to Colon and he'll get around to fixing it at some point.\n\n${e.stack}`, 'utf8') }
+catch(e) { console.log(e); fs.writeFileSync('crash_log.txt', e.stack ? `Something went wrong! Send this error to Colon and he'll get around to fixing it at some point.\n\n${e.stack}` : e, 'utf8') }
