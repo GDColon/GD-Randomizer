@@ -15,3 +15,8 @@ HOW TO USE:
 - Run the "shuffle.exe" file.
 - When it finishes, drag the files in the "pack" folder into your GD resources folder.
 - When asked to overwrite files, click yes.
+
+===
+
+If the program closes as soon as you open it, that means it crashed.
+A file called crash_log.txt will be created - send it to Colon and he'll hopefully get around to fixing it.
