@@ -54,7 +54,8 @@ resources.forEach(x => {
 sheetNames.forEach(x => {
     let file = fs.readFileSync(`${gdPath}/${x}.plist`, 'utf8')
     plists.push(file)
-    sheets.push(plistToJson(file))
+    try { sheets.push(plistToJson(file)) }
+    catch(e) { throw `Error parsing ${x}.plist - ${e.message}` }
 })
 
 sheets.forEach((gameSheet, sheetNum) => {
