@@ -2,6 +2,8 @@ const fs = require('fs')
 const plist = require('plist');
 const assets = require('./assets.json')
 
+try {   // god-tier crash prevention system
+
 Array.prototype.shuffle = function() {
     let length = this.length; let unshuffled = this; let shuffled = [];
     while (shuffled.length !== length) {
@@ -31,9 +33,10 @@ let iconRegex = /^.+?_(\d+?)_.+/
 let forms = assets.forms
 let sheetList = Object.keys(assets.sheets)
 let glowName = sheetList.filter(x => x.startsWith('GJ_GameSheetGlow'))
-let glowPlist = fs.readFileSync(`${assets.gdPath}/${glowName[0]}.plist`, 'utf8')
+let gdPath = fs.readFileSync('directory.txt', 'utf8')
+let glowPlist = fs.readFileSync(`${gdPath}/${glowName[0]}.plist`, 'utf8')
 let sheetNames = sheetList.filter(x => !glowName.includes(x))
-let resources = fs.readdirSync(assets.gdPath)
+let resources = fs.readdirSync(gdPath)
 
 let plists = []
 let sheets = []
@@ -45,7 +48,7 @@ resources.forEach(x => {
 })
 
 sheetNames.forEach(x => {
-    let file = fs.readFileSync(`${assets.gdPath}/${x}.plist`, 'utf8')
+    let file = fs.readFileSync(`${gdPath}/${x}.plist`, 'utf8')
     plists.push(file)
     sheets.push(plistToJson(file))
 })
@@ -117,10 +120,14 @@ assets.sprites.forEach(img => {
     if (spriteMatch[2] == "g2") foundTextures = foundTextures.filter(x => specialGrounds.some(y => x.startsWith(y)))
 
     let shuffledTextures = foundTextures.shuffle()
-    foundTextures.forEach((x, y) => fs.copyFileSync(`${assets.gdPath}/${x}`, `./pack/${shuffledTextures[y]}`))
+    foundTextures.forEach((x, y) => fs.copyFileSync(`${gdPath}/${x}`, `./pack/${shuffledTextures[y]}`))
 })
 
 let emptyDict = glowPlist.match(/<dict>\s*<key>aliases<\/key>(.|\n)+?<\/dict>/)[0].replace(/{\d+,\d+}/g, "{0, 0}")
 let mappedBackups = glowBackups.reverse().map(x => `<key>${x}</key>${emptyDict}`).join("")
 glowPlist = fs.writeFileSync('./pack/GJ_GameSheetGlow-uhd.plist', glowPlist.replace(/###/g, "").replace(/<dict>\s*<key>frames<\/key>\s*<dict>/g, "$&" + mappedBackups), 'utf8')
 console.log("Randomization complete!")
+
+}
+
+catch(e) { console.log(e); fs.writeFileSync('crash_log.txt', `Something went wrong! Send this error to Colon and he'll get around to fixing it at some point.\n\n${e.stack}`, 'utf8') }
