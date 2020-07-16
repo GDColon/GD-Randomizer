@@ -23,13 +23,14 @@ sounds.forEach(sound => {
 });
 
 var mp3dest = [...mp3s].shuffle() 
-for (i=0; i < mp3s.length; i++) {
+
+mp3s.forEach((sound,i) => {  
     fs.renameSync(path.join(gdPath,"#" + mp3s[i]),path.join(gdPath,mp3dest[i]))
-}
+});
 
 var oggDest = [...oggs].shuffle()
-for (i=0; i < oggs.length; i++) {
+oggs.forEach((sound,i) => {  
     fs.renameSync(path.join(gdPath,"#" + oggs[i]),path.join(gdPath,oggDest[i]))
-}
+});
 
 console.log("dunsparce.")

@@ -19,8 +19,9 @@ mp3s.forEach(sound => {
 });
 
 var mp3dest = [...mp3s].shuffle() 
-for (i=0; i < mp3s.length; i++) {
+
+mp3s.forEach((sound,i) => {  
     fs.renameSync(path.join(process.env.LOCALAPPDATA,"GeometryDash","#" + mp3s[i]),path.join(process.env.LOCALAPPDATA,"GeometryDash",mp3dest[i]))
-}
+});
 
 console.log("dunsparce.")
