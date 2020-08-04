@@ -131,6 +131,13 @@ assets.sprites.forEach(img => {
 let emptyDict = glowPlist.match(/<dict>\s*<key>aliases<\/key>(.|\n)+?<\/dict>/)[0].replace(/{\d+,\d+}/g, "{0, 0}")
 let mappedBackups = glowBackups.reverse().map(x => `<key>${x}</key>${emptyDict}`).join("")
 glowPlist = fs.writeFileSync('./pack/GJ_GameSheetGlow-uhd.plist', glowPlist.replace(/###/g, "").replace(/<dict>\s*<key>frames<\/key>\s*<dict>/g, "$&" + mappedBackups), 'utf8')
+
+console.log("Shuffling particle effects");
+let particlesShuffled = assets.particles.shuffle();
+assets.particles.forEach((x, i) =>{
+    fs.copyFileSync(`${gdPath}/${x}.plist`,`./pack/${particlesShuffled[i]}.plist`)
+});
+
 console.log("Randomization complete!")
 
 }
