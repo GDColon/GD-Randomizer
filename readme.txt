@@ -1,6 +1,7 @@
 BACK UP YOUR GD RESOURCES FOLDER BEFORE RUNNING THIS PROGRAM!
 C:\Program Files (x86)\Steam\steamapps\common\Geometry Dash\Resources
 (just make a copy of the folder or something)
+(or use the "verify integrity of game files" button)
 
 ===
 
