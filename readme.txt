@@ -11,10 +11,15 @@ It's also compatible with texture packs!
 
 ===
 
-HOW TO USE:
+HOW TO USE ON WINDOWS:
 - Run the "shuffle.exe" file.
 - When it finishes, drag the files in the "pack" folder into your GD resources folder.
 - When asked to overwrite files, click yes.
+
+HOW TO USE ON LINUX:
+- Run shuffle-linux.js.
+- Move pack folder into GD resources folder.
+- When cp/mv asks to overwrite, press A for All.
 
 ===
 
