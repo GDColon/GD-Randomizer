@@ -1,5 +1,5 @@
 BACK UP YOUR GD RESOURCES FOLDER BEFORE RUNNING THIS PROGRAM!
-C:\Program Files (x86)\Steam\steamapps\common\Geometry Dash\Resources
+C:\Program Files (x86)\Steam\steamapps\common\Geometry Dash\Resources or $HOME/.steam/steam/steamapps/common/Geometry Dash/Resources if you use Mac/Linux
 (just make a copy of the folder or something)
 
 ===
@@ -16,7 +16,7 @@ HOW TO USE ON WINDOWS:
 - When it finishes, drag the files in the "pack" folder into your GD resources folder.
 - When asked to overwrite files, click yes.
 
-HOW TO USE ON LINUX:
+HOW TO USE ON MAC/LINUX:
 - Run shuffle-linux.js.
 - Move pack folder into GD resources folder.
 - When cp/mv asks to overwrite, press A for All.
