@@ -20,3 +20,8 @@ HOW TO USE:
 
 If the program closes as soon as you open it, that means it crashed.
 A file called crash_log.txt will be created - send it to Colon and he'll hopefully get around to fixing it.
+
+===
+
+Mac/Linux/non-Windows users, or if the game is installed in a nonstandard location:
+Replace the directory in directory.txt with whereever the game's Resources folder is located on your system, or simply pass it as a command-line argument.
