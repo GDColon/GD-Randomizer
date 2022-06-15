@@ -36,7 +36,7 @@ let iconRegex = /^.+?_(\d+?)_.+/
 let forms = assets.forms
 let sheetList = Object.keys(assets.sheets)
 let glowName = sheetList.filter(x => x.startsWith('GJ_GameSheetGlow'))
-let gdPath = fs.readFileSync('directory.txt', 'utf8')
+let gdPath = process.argv[2] ?? fs.readFileSync('directory.txt', 'utf8')
 if (!fs.existsSync(gdPath)) throw "Couldn't find your GD directory! Make sure to enter the correct file path in directory.txt"  
 let glowPlist = fs.readFileSync(`${gdPath}/${glowName[0]}.plist`, 'utf8')
 let sheetNames = sheetList.filter(x => !glowName.includes(x))
