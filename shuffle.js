@@ -2,38 +2,47 @@ const fs = require('fs')
 const plist = require('plist');
 const assets = require('./assets.json')
 
-try {   // god-tier crash prevention system
+/**
+ * returns a pseudo-random 32bit unsigned integer
+ * in the interval [0, `n`)
+ */
+const randU32 = (n = 2**32) => Math.random() * n >>> 0;
 
 Array.prototype.shuffle = function() {
-    let length = this.length; let unshuffled = this; let shuffled = [];
+    const {length} = this; let unshuffled = this; let shuffled = [];
     while (shuffled.length !== length) {
-        let index = Math.floor(Math.random() * unshuffled.length);
+        let index = randU32(unshuffled.length);
         shuffled.push(unshuffled[index]);
-        unshuffled = unshuffled.filter((x, y) => y !== (index))}
+        unshuffled = unshuffled.filter((_, y) => y !== index)
+    }
     return shuffled;
-}  
+}
 
-function plistToJson(file) {
+let undupe = arr => arr.filter((x, y) => arr.indexOf(x) == y);
+
+let plistToJson = file => {
     let data = plist.parse(file)
     for (let key in data.frames) {
         let fileData = data.frames[key];
         for (let innerKey in fileData) {
-            if (typeof fileData[innerKey] == 'string') {
-                if (!fileData[innerKey].length) delete fileData[innerKey]
-                else fileData[innerKey] = JSON.parse(fileData[innerKey].replace(/{/g, '[').replace(/}/g, ']'));
+            let fdik = fileData[innerKey];
+            if (typeof  == 'string') {
+                if (!fdik.length) delete fileData[innerKey]
+                else fileData[innerKey] = JSON.parse(fdik.replace(/{/g, '[').replace(/}/g, ']'));
             }
     }}
     return data.frames
 }
 
+try {   // god-tier crash prevention system
+
 if (!fs.existsSync('./pack')) fs.mkdirSync('./pack');
 
-function glow(name) { return name.replace("_001.png", "_glow_001.png") }
-function undupe (arr) { return arr.filter((x, y) => arr.indexOf(x) == y) }
-//function spriteRegex(name) { return new RegExp(`(<key>${name.replace(".", "\\.")}<\/key>\\s*)(<dict>(.|\\n)+?<\\/dict>)`) }
+let glow = name => name.replace("_001.png", "_glow_001.png");
+//const spriteRegex = name => new RegExp(`(<key>${name.replace(".", "\\.")}<\/key>\\s*)(<dict>(.|\\n)+?<\\/dict>)`);
 let iconRegex = /^.+?_(\d+?)_.+/
 
-let forms = assets.forms
+let {forms} = assets
 let sheetList = Object.keys(assets.sheets)
 let glowName = sheetList.filter(x => x.startsWith('GJ_GameSheetGlow'))
 
