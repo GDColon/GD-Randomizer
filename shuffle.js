@@ -36,17 +36,18 @@ const undupe = arr => arr.filter((x, y) => arr.indexOf(x) == y);
  * @return {import('plist').PlistObject}
  */
 const plistToJson = file => {
-    /**@type {import('plist').PlistObject}*/
-    const data = plist.parse(file)
-    for (const fileData of Object.values(data.frames)) {
-        for (const k in fileData) {
-            const fdik = fileData[k];
+    const {frames: datFrames} = plist.parse(file);
+    // not using `Object.values`, because we want to mutate in-place
+    for (const out_k in datFrames) {
+        const fileData = datFrames[out_k];
+        for (const in_k in fileData) {
+            const fdik = fileData[in_k];
             if (typeof fdik == 'string') {
-                if (fdik.length == 0) delete fileData[k]
-                else fileData[k] = JSON.parse(fdik.replace(/{/g, '[').replace(/}/g, ']'));
+                if (fdik.length == 0) delete fileData[in_k]
+                else fileData[in_k] = JSON.parse(fdik.replace(/{/g, '[').replace(/}/g, ']'));
             }
     }}
-    return data.frames
+    return datFrames
 }
 
 /** working directory */
@@ -119,9 +120,9 @@ try { // god-tier crash prevention system
 
         Object.keys(sizes).forEach(k => {
             /**@type {{name: string}[]}*/
-            let objects = sizes[k]
+            const objects = sizes[k]
             if (objects.length == 1) return delete sizes[k]
-            let iconMode = forms.includes(k)
+            const iconMode = forms.includes(k)
             let oldNames = objects.map(x => x.name)
             if (iconMode) oldNames = undupe(oldNames.map(x => x.replace(iconRegex, "$1")))
             let newNames = shuffle(oldNames)
