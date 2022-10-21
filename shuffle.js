@@ -11,17 +11,17 @@ const assets = require('./assets.json')
 const randU32 = (n = 2**32) => Math.random() * n >>> 0;
 
 /**
- *
- * @param {any[]} unshuffled
+ * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
+ * @param {any[]} inp
  */
-const shuffle = unshuffled => {
-    const {length} = unshuffled, shuffled = [];
-    while (shuffled.length !== length) {
-        let index = randU32(unshuffled.length);
-        shuffled.push(unshuffled[index]);
-        unshuffled = unshuffled.filter((_, y) => y !== index)
+const shuffle = inp => {
+    const {length} = inp, out = [];
+    while (out.length !== length) {
+        let index = randU32(inp.length);
+        out.push(inp[index]);
+        inp = inp.filter((_, y) => y !== index)
     }
-    return shuffled;
+    return out;
 };
 
 /**
