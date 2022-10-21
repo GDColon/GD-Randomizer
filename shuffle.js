@@ -36,7 +36,7 @@ let plistToJson = file => {
 
 try {   // god-tier crash prevention system
 
-if (!fs.existsSync('./pack')) fs.mkdirSync('./pack');
+fs.mkdirSync('./pack', { recursive: true, mode: 0o766 });
 
 let glow = name => name.replace("_001.png", "_glow_001.png");
 //const spriteRegex = name => new RegExp(`(<key>${name.replace(".", "\\.")}<\/key>\\s*)(<dict>(.|\\n)+?<\\/dict>)`);
