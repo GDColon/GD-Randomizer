@@ -33,9 +33,9 @@ const undupe = arr => arr.filter((x, y) => arr.indexOf(x) == y);
 const plistToJson = (/**@type {string}*/ file) => {
     const data = plist.parse(file)
     for (const out_k in data.frames) {
-        let fileData = data.frames[out_k];
+        const fileData = data.frames[out_k];
         for (const in_k in fileData) {
-            let fdik = fileData[in_k];
+            const fdik = fileData[in_k];
             if (typeof fdik == 'string') {
                 if (fdik.length == 0) delete fileData[in_k]
                 else fileData[in_k] = JSON.parse(fdik.replace(/{/g, '[').replace(/}/g, ']'));
@@ -44,9 +44,12 @@ const plistToJson = (/**@type {string}*/ file) => {
     return data.frames
 }
 
+/** working directory */
+const wd = './pack/';
+
 try { // god-tier crash prevention system
 
-    fs.mkdirSync('./pack', { recursive: true, mode: 0o766 });
+    fs.mkdirSync(wd, { recursive: true, mode: 0o766 });
 
     const glow = (/**@type {string}*/ name) => name.replace("_001.png", "_glow_001.png");
     //const spriteRegex = name => new RegExp(`(<key>${name.replace(".", "\\.")}<\/key>\\s*)(<dict>(.|\\n)+?<\\/dict>)`);
@@ -62,7 +65,7 @@ try { // god-tier crash prevention system
 
     if (!fs.existsSync(gdPath))
         throw "Couldn't find your GD directory! Make sure to enter the correct file path in directory.txt"
-    const glowPlist = fs.readFileSync(`${gdPath}/${glowName[0]}.plist`, 'utf8')
+    let glowPlist = fs.readFileSync(`${gdPath}/${glowName[0]}.plist`, 'utf8')
     const sheetNames = sheetList.filter(x => !glowName.includes(x))
     const resources = fs.readdirSync(gdPath)
 
@@ -137,27 +140,28 @@ try { // god-tier crash prevention system
                 }
             })
         })
-        plist = plist.replace(/###/g, "")
-        fs.writeFileSync('./pack/' + sheetNames[sheetNum] + '.plist', plist, 'utf8')
+        plist = plist.replace(/###/g, '')
+        fs.writeFileSync(wd + sheetNames[sheetNum] + '.plist', plist, 'utf8')
     })
 
     console.log("Shuffling misc textures")
-    let specialGrounds = []
+    /**@type {string[]}*/
+    const specialGrounds = []
     assets.sprites.forEach(img => {
-        let spriteMatch = img.split("|")
+        const spriteMatch = img.split("|")
         let foundTextures = resources.filter(x => x.match(new RegExp(`^${spriteMatch[0].replace("#", "\\d+?")}-uhd\\.${spriteMatch[1] || "png"}`)))
 
-        if (spriteMatch[2] == "*") specialGrounds = specialGrounds.concat(foundTextures.map(x => x.slice(0, 15)))
+        if (spriteMatch[2] == "*") specialGrounds.push(...foundTextures.map(x => x.slice(0, 15))) // in-place `concat`
         if (spriteMatch[2] == "g1") foundTextures = foundTextures.filter(x => !specialGrounds.some(y => x.startsWith(y)))
         if (spriteMatch[2] == "g2") foundTextures = foundTextures.filter(x => specialGrounds.some(y => x.startsWith(y)))
 
         let shuffledTextures = shuffle(foundTextures)
-        foundTextures.forEach((x, y) => fs.copyFileSync(`${gdPath}/${x}`, `./pack/${shuffledTextures[y]}`))
+        foundTextures.forEach((x, y) => fs.copyFileSync(`${gdPath}/${x}`, wd + shuffledTextures[y]))
     })
 
     let emptyDict = glowPlist.match(/<dict>\s*<key>aliases<\/key>(.|\n)+?<\/dict>/)[0].replace(/{\d+,\d+}/g, "{0, 0}")
     let mappedBackups = glowBackups.reverse().map(x => `<key>${x}</key>${emptyDict}`).join('')
-    glowPlist = fs.writeFileSync('./pack/GJ_GameSheetGlow-uhd.plist', glowPlist.replace(/###/g, "").replace(/<dict>\s*<key>frames<\/key>\s*<dict>/g, "$&" + mappedBackups), 'utf8')
+    glowPlist = fs.writeFileSync(wd + 'GJ_GameSheetGlow-uhd.plist', glowPlist.replace(/###/g, "").replace(/<dict>\s*<key>frames<\/key>\s*<dict>/g, "$&" + mappedBackups), 'utf8')
     console.log("Randomization complete!")
 
 }
