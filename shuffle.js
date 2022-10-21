@@ -15,14 +15,14 @@ const randU32 = (n = 2**32) => Math.random() * n >>> 0;
  * @param {any[]} unshuffled
  */
 const shuffle = unshuffled => {
-        const {length} = unshuffled, shuffled = [];
-        while (shuffled.length !== length) {
-            let index = randU32(unshuffled.length);
-            shuffled.push(unshuffled[index]);
-            unshuffled = unshuffled.filter((_, y) => y !== index)
-        }
-        return shuffled;
-    };
+    const {length} = unshuffled, shuffled = [];
+    while (shuffled.length !== length) {
+        let index = randU32(unshuffled.length);
+        shuffled.push(unshuffled[index]);
+        unshuffled = unshuffled.filter((_, y) => y !== index)
+    }
+    return shuffled;
+};
 
 /**
  * get unique/distinct elements (same order)
