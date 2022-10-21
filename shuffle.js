@@ -18,6 +18,10 @@ Array.prototype.shuffle = function() {
     return shuffled;
 }
 
+/**
+ * get unique/distinct elements (same order)
+ * @param {any[]} arr
+ */
 let undupe = arr => arr.filter((x, y) => arr.indexOf(x) == y);
 
 let plistToJson = file => {
@@ -60,7 +64,8 @@ let glowBackups = []
 let glowSheet = plistToJson(glowPlist)
 
 resources.forEach(x => {
-    if (x.startsWith('PlayerExplosion_') && x.endsWith('-uhd.plist')) sheetNames.push(x.slice(0, -6))
+    if (x.startsWith('PlayerExplosion_') && x.endsWith('-uhd.plist'))
+        sheetNames.push(x.slice(0, -6)) // -6 removes ".plist", efficiently
 })
 
 sheetNames.forEach(x => {
