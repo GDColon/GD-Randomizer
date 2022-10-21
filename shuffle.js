@@ -12,16 +12,16 @@ const randU32 = (n = 2**32) => Math.random() * n >>> 0;
 
 /**
  * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
- * @param {any[]} inp
+ * https://github.com/steventhomson/array-generic-shuffle/blob/master/shuffle.js
+ * @param {any[]} a
  */
-const shuffle = inp => {
-    const {length} = inp, out = [];
-    while (out.length !== length) {
-        let index = randU32(inp.length);
-        out.push(inp[index]);
-        inp = inp.filter((_, y) => y !== index)
+const shuffle = a => {
+    let len = a.length;
+    while (len > 0) {
+        const i = randU32(len);
+        len--;
+        [a[len], a[i]] = [a[i], a[len]]; // swap
     }
-    return out;
 };
 
 /**
