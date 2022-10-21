@@ -30,15 +30,20 @@ const shuffle = unshuffled => {
  */
 const undupe = arr => arr.filter((x, y) => arr.indexOf(x) == y);
 
-const plistToJson = (/**@type {string}*/ file) => {
+/**
+ * convert plist string to JSON, then JSON to `Object`
+ * @param {string} file
+ * @return {import('plist').PlistObject}
+ */
+const plistToJson = file => {
+    /**@type {import('plist').PlistObject}*/
     const data = plist.parse(file)
-    for (const out_k in data.frames) {
-        const fileData = data.frames[out_k];
-        for (const in_k in fileData) {
-            const fdik = fileData[in_k];
+    for (const fileData of Object.values(data.frames)) {
+        for (const k in fileData) {
+            const fdik = fileData[k];
             if (typeof fdik == 'string') {
-                if (fdik.length == 0) delete fileData[in_k]
-                else fileData[in_k] = JSON.parse(fdik.replace(/{/g, '[').replace(/}/g, ']'));
+                if (fdik.length == 0) delete fileData[k]
+                else fileData[k] = JSON.parse(fdik.replace(/{/g, '[').replace(/}/g, ']'));
             }
     }}
     return data.frames
@@ -69,6 +74,7 @@ try { // god-tier crash prevention system
     const sheetNames = sheetList.filter(x => !glowName.includes(x))
     const resources = fs.readdirSync(gdPath)
 
+    /**@type {string[]}*/
     const plists = []
     const sheets = []
     const glowBackups = []
@@ -80,7 +86,7 @@ try { // god-tier crash prevention system
     })
 
     sheetNames.forEach(x => {
-        let file = fs.readFileSync(`${gdPath}/${x}.plist`, 'utf8')
+        const file = fs.readFileSync(`${gdPath}/${x}.plist`, 'utf8')
         plists.push(file)
         try { sheets.push(plistToJson(file)) }
         catch(e) { throw `Error parsing ${x}.plist - ${e.message}` }
@@ -111,11 +117,11 @@ try { // god-tier crash prevention system
             }
         })
 
-        Object.keys(sizes).forEach(obj => {
+        Object.keys(sizes).forEach(k => {
             /**@type {{name: string}[]}*/
-            let objects = sizes[obj]
-            if (objects.length == 1) return delete sizes[obj]
-            let iconMode = forms.includes(obj)
+            let objects = sizes[k]
+            if (objects.length == 1) return delete sizes[k]
+            let iconMode = forms.includes(k)
             let oldNames = objects.map(x => x.name)
             if (iconMode) oldNames = undupe(oldNames.map(x => x.replace(iconRegex, "$1")))
             let newNames = shuffle(oldNames)
@@ -128,8 +134,8 @@ try { // god-tier crash prevention system
             oldNames.forEach((x, y) => {
                 let newName = newNames[iconMode ? x : y]
                 if (iconMode) {
-                    plist = plist.replace(new RegExp(`<key>${obj}_${x}_`, "g"), `<key>###${obj}_${newName}_`)
-                    glowPlist = glowPlist.replace(`<key>${obj}_${x}_`, `<key>###${obj}_${newName}_`)
+                    plist = plist.replace(new RegExp(`<key>${k}_${x}_`, "g"), `<key>###${k}_${newName}_`)
+                    glowPlist = glowPlist.replace(`<key>${k}_${x}_`, `<key>###${k}_${newName}_`)
                 }
                 else {
                     plist = plist.replace(`<key>${x}</key>`, `<key>###${newName}</key>`)
